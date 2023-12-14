@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Colors from "./components/Colors";
+import questionIcon from "./assets/question_mark_icon.svg";
 
 function App() {
   const EMPTY = "empty";
@@ -16,16 +17,17 @@ function App() {
     [EMPTY, EMPTY, EMPTY, EMPTY],
   ]);
   const [scoreBoard, setScoreBoard] = useState([
-    { correct: 0, misPlaced: 0 }, //each one of this is connected to each guessRow in decondingBoard
-    { correct: 0, misPlaced: 0 },
-    { correct: 0, misPlaced: 0 },
-    { correct: 0, misPlaced: 0 },
-    { correct: 0, misPlaced: 0 },
-    { correct: 0, misPlaced: 0 },
-    { correct: 0, misPlaced: 0 },
-    { correct: 0, misPlaced: 0 },
-    { correct: 0, misPlaced: 0 },
-    { correct: 0, misPlaced: 0 },
+    //each one of this is connected to each guessRow in decondingBoard
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
   ]);
 
   const codePegs = [
@@ -37,13 +39,11 @@ function App() {
     "VL",
     "YW",
     "RD",
-    //key pegs - it is equal to clor that is use to score each incorrect guessRow
-    "WH",
-    "BK",
   ];
   const [selectedCodePeg, setSelectedCodePeg] = useState(codePegs[0]);
   const [secretCodes, setSecretCodes] = useState([]);
   const [currentGuessRow, setCurrentGuessRow] = useState(0);
+  const [winCurrentGame, setWinCurrentGame] = useState(false);
 
   function generateSecretCodes() {
     let newSecretCodes = [];
@@ -80,6 +80,7 @@ function App() {
       //verify guess if correct
       if (isWin()) {
         console.log("WIN: You break the code");
+        setWinCurrentGame(true);
       }
       //if not then proceed to next attempt
       else {
@@ -90,8 +91,7 @@ function App() {
   }
 
   function giveScore(guessRowIndex) {
-    let correctScore = 0;
-    let misplacedScore = 0;
+    const guessRowScores = [];
     const MATCH_CODE_INDEX = [];
     const guessCodes = decodingBoard[guessRowIndex];
 
@@ -102,11 +102,12 @@ function App() {
         if (!MATCH_CODE_INDEX.includes(secretCodeIndex)) {
           //if same value and index matched
           if (secretCode === guessCode && secretCodeIndex === guessCodeIndex) {
-              correctScore++;
+            //add score for correct
+            guessRowScores.push("GN");
 
-              //the index of all all matched code will be added to MATCH CODE INDEX
-              //so that the next interation does index will be skip
-              MATCH_CODE_INDEX.push(secretCodeIndex);
+            //the index of all all matched code will be added to MATCH CODE INDEX
+            //so that the next interation does index will be skip
+            MATCH_CODE_INDEX.push(secretCodeIndex);
           }
         }
       });
@@ -120,23 +121,24 @@ function App() {
           //all matched value and index are already recorded
           //count all matched in value but not the index
           if (secretCode === guessCode) {
-              misplacedScore++;
+            //add score for misplaced
+            guessRowScores.push("WH");
 
-              //the index of all all matched code will be added to MATCH CODE INDEX
-              //so that the next interation does index will be skip
-              MATCH_CODE_INDEX.push(secretCodeIndex);
+            //the index of all all matched code will be added to MATCH CODE INDEX
+            //so that the next interation does index will be skip
+            MATCH_CODE_INDEX.push(secretCodeIndex);
           }
         }
       });
     });
 
-    console.log(
-      "SCORE correct: " + correctScore + "  misPlaced: " + misplacedScore
-    );
+    //add empty to guessRowScores for the incorrect guesses
+    while (guessRowScores.length < 4) {
+      guessRowScores.push(EMPTY);
+    }
 
     const newScoreBoard = [...scoreBoard];
-    newScoreBoard[guessRowIndex].correct = correctScore;
-    newScoreBoard[guessRowIndex].misPlaced = misplacedScore;
+    newScoreBoard[guessRowIndex] = guessRowScores;
     setScoreBoard(newScoreBoard);
   }
 
@@ -161,13 +163,21 @@ function App() {
       <div>{10 - currentGuessRow}</div>
 
       {/* secret code display */}
-      <div>
-        {secretCodes.map((colCode, index) => (
-          <button
-            className={`${Colors[colCode]} h-10 w-10`}
-            key={index}
-          ></button>
-        ))}
+      <div className="flex mb-5">
+        {secretCodes.map((colCode, index) =>
+          winCurrentGame ? (
+            <div  className={`${Colors[colCode]} h-10 w-10 border-black border-2 rounded-full`}
+              key={index}
+            ></div>
+          ) : (
+            <div
+              className={`${Colors[EMPTY]} bg-secret-code h-10 w-10 border-black border-2 rounded-full`}
+              key={index}
+            >
+              <img className="object-contain w-full h-full" src={questionIcon} />
+            </div>
+          )
+        )}
       </div>
       {/* decoding board display */}
       <div className="flex">
@@ -176,7 +186,7 @@ function App() {
             <div key={rowIndex}>
               {guessRow.map((colCode, colIndex) => (
                 <button
-                  className={`${Colors[colCode]} h-10 w-10`}
+                  className={`${Colors[colCode]} h-10 w-10 border-black border-2 rounded-full`}
                   key={colIndex}
                   onClick={() => makeGuess(rowIndex, colIndex)}
                 ></button>
@@ -184,15 +194,17 @@ function App() {
             </div>
           ))}
         </div>
-        <div>
+        <div className="space-y-1.5 ml-2">
           {scoreBoard.map((scoreRow, rowIndex) => (
-            <div key={rowIndex} className="flex mb-1.5 text-center bg-gray-100">
-              <div className="w-10 h-10">
-                {scoreRow.correct != 0 && scoreRow.correct}
-              </div>
-              <div className="w-10 h-10">
-                {scoreRow.misPlaced != 0 && scoreRow.misPlaced}
-              </div>
+            <div key={rowIndex} className="grid grid-cols-2 gap-1">
+              {scoreRow.map((score, colIndex) => {
+                return (
+                  <div
+                    key={colIndex}
+                    className={`${Colors[score]} h-3 w-3 border-black border rounded-full`}
+                  ></div>
+                );
+              })}
             </div>
           ))}
         </div>
@@ -202,7 +214,7 @@ function App() {
       <div>
         {codePegs.slice(0, 6).map((code, index) => (
           <button
-            className={`${Colors[code]} h-10 w-10`}
+            className={`${Colors[code]} h-10 w-10 border-black border-2 rounded-full`}
             key={index}
             onClick={() => setSelectedCodePeg(code)}
           ></button>
