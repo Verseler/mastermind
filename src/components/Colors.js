@@ -8,4 +8,5 @@ export default {
   "RD" : "bg-red-500",
   "GN" : "bg-green-500",
   "WH" : "bg-white",
+  "BL" : "bg-black",
 }

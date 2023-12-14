@@ -18,16 +18,16 @@ function App() {
   ]);
   const [scoreBoard, setScoreBoard] = useState([
     //each one of this is connected to each guessRow in decondingBoard
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
+    [EMPTY, EMPTY, EMPTY, EMPTY],
+    [EMPTY, EMPTY, EMPTY, EMPTY],
+    [EMPTY, EMPTY, EMPTY, EMPTY],
+    [EMPTY, EMPTY, EMPTY, EMPTY],
+    [EMPTY, EMPTY, EMPTY, EMPTY],
+    [EMPTY, EMPTY, EMPTY, EMPTY],
+    [EMPTY, EMPTY, EMPTY, EMPTY],
+    [EMPTY, EMPTY, EMPTY, EMPTY],
+    [EMPTY, EMPTY, EMPTY, EMPTY],
+    [EMPTY, EMPTY, EMPTY, EMPTY],
   ]);
 
   const codePegs = [
@@ -103,7 +103,7 @@ function App() {
           //if same value and index matched
           if (secretCode === guessCode && secretCodeIndex === guessCodeIndex) {
             //add score for correct
-            guessRowScores.push("GN");
+            guessRowScores.push("BL");
 
             //the index of all all matched code will be added to MATCH CODE INDEX
             //so that the next interation does index will be skip
@@ -156,8 +156,6 @@ function App() {
 
   return (
     <div>
-      {/* start game button */}
-      <button onClick={generateSecretCodes}>Play Game</button>
 
       {/* display remaining attempts */}
       <div>{10 - currentGuessRow}</div>
@@ -180,7 +178,7 @@ function App() {
         )}
       </div>
       {/* decoding board display */}
-      <div className="flex">
+      <div className="flex justify-center">
         <div>
           {decodingBoard.map((guessRow, rowIndex) => (
             <div key={rowIndex}>
@@ -192,23 +190,25 @@ function App() {
                 ></button>
               ))}
             </div>
-          ))}
+          )).reverse()}
         </div>
-        <div className="space-y-1.5 ml-2">
+        <div className="ml-2 space-y-1">
           {scoreBoard.map((scoreRow, rowIndex) => (
-            <div key={rowIndex} className="grid grid-cols-2 gap-1">
-              {scoreRow.map((score, colIndex) => {
-                return (
+            <div key={rowIndex} className="grid h-10 grid-cols-2 w-7 gap-y-1 place-content-center">
+              {scoreRow.map((score, colIndex) => (
                   <div
                     key={colIndex}
                     className={`${Colors[score]} h-3 w-3 border-black border rounded-full`}
                   ></div>
-                );
-              })}
+              ))}
             </div>
-          ))}
+          )).reverse()}
         </div>
       </div>
+
+
+           {/* start game button */}
+           <button onClick={generateSecretCodes}>Play Game</button>
 
       {/* codePegs display */}
       <div>
