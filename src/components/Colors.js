@@ -1,5 +1,5 @@
 export default {
-  "empty" : "bg-gray-300",
+  "empty" : "bg-slate-300",
   "BU" : "bg-blue-500",
   "PK" : "bg-pink-500",
   "OR" : "bg-orange-500",
@@ -8,5 +8,5 @@ export default {
   "RD" : "bg-red-500",
   "GN" : "bg-green-500",
   "WH" : "bg-white",
-  "BL" : "bg-black",
+  "SK" : "bg-sky-500",
 }

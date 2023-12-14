@@ -1,6 +1,8 @@
 import { useState } from "react";
 import Colors from "./components/Colors";
-import questionIcon from "./assets/question_mark_icon.svg";
+import ClickableTile from "./components/ClickableTile";
+import Tile from "./components/Tile";
+import BottomCodePegs from "./components/BottomCodePegs";
 
 function App() {
   const EMPTY = "empty";
@@ -40,6 +42,7 @@ function App() {
     "YW",
     "RD",
   ];
+
   const [selectedCodePeg, setSelectedCodePeg] = useState(codePegs[0]);
   const [secretCodes, setSecretCodes] = useState([]);
   const [currentGuessRow, setCurrentGuessRow] = useState(0);
@@ -103,7 +106,7 @@ function App() {
           //if same value and index matched
           if (secretCode === guessCode && secretCodeIndex === guessCodeIndex) {
             //add score for correct
-            guessRowScores.push("BL");
+            guessRowScores.push("SK");
 
             //the index of all all matched code will be added to MATCH CODE INDEX
             //so that the next interation does index will be skip
@@ -156,70 +159,71 @@ function App() {
 
   return (
     <div>
-
       {/* display remaining attempts */}
       <div>{10 - currentGuessRow}</div>
 
       {/* secret code display */}
-      <div className="flex mb-5">
+      <div className="flex mb-5 space-x-1">
         {secretCodes.map((colCode, index) =>
           winCurrentGame ? (
-            <div  className={`${Colors[colCode]} h-10 w-10 border-black border-2 rounded-full`}
-              key={index}
-            ></div>
+            <Tile key={index} bgColor={Colors[colCode]} hasChild={false} />
           ) : (
-            <div
-              className={`${Colors[EMPTY]} bg-secret-code h-10 w-10 border-black border-2 rounded-full`}
-              key={index}
-            >
-              <img className="object-contain w-full h-full" src={questionIcon} />
-            </div>
+            <Tile key={index} bgColor={Colors[EMPTY]} hasChild={true} />
           )
         )}
       </div>
       {/* decoding board display */}
       <div className="flex justify-center">
-        <div>
-          {decodingBoard.map((guessRow, rowIndex) => (
-            <div key={rowIndex}>
-              {guessRow.map((colCode, colIndex) => (
-                <button
-                  className={`${Colors[colCode]} h-10 w-10 border-black border-2 rounded-full`}
-                  key={colIndex}
-                  onClick={() => makeGuess(rowIndex, colIndex)}
-                ></button>
-              ))}
-            </div>
-          )).reverse()}
+        <div className="space-y-2">
+          {decodingBoard
+            .map((guessRow, rowIndex) => (
+              <div
+                key={rowIndex}
+                className={`${
+                  currentGuessRow === rowIndex &&
+                  "border-sky-500 border-2 rounded-full"
+                } flex gap-1`}
+              >
+                {guessRow.map((colCode, colIndex) => (
+                  <ClickableTile
+                    key={colIndex}
+                    onClickAction={() => makeGuess(rowIndex, colIndex)}
+                    conditionStyles={
+                      decodingBoard[rowIndex][colIndex] === EMPTY &&
+                      currentGuessRow === rowIndex &&
+                      "animate-blinking"
+                    }
+                    bgColor={Colors[colCode]}
+                  />
+                ))}
+              </div>
+            ))
+            .reverse()}
         </div>
-        <div className="ml-2 space-y-1">
-          {scoreBoard.map((scoreRow, rowIndex) => (
-            <div key={rowIndex} className="grid h-10 grid-cols-2 w-7 gap-y-1 place-content-center">
-              {scoreRow.map((score, colIndex) => (
+        {/* Score board for each row of decoding board */}
+        <div className="ml-2 space-y-2">
+          {scoreBoard
+            .map((scoreRow, rowIndex) => (
+              <div
+                key={rowIndex}
+                className="grid h-10 grid-cols-2 w-7 gap-y-1 place-content-center"
+              >
+                {scoreRow.map((score, colIndex) => (
                   <div
                     key={colIndex}
                     className={`${Colors[score]} h-3 w-3 border-black border rounded-full`}
                   ></div>
-              ))}
-            </div>
-          )).reverse()}
+                ))}
+              </div>
+            ))
+            .reverse()}
         </div>
       </div>
 
+      {/* start game button */}
+      <button onClick={generateSecretCodes}>Play Game</button>
 
-           {/* start game button */}
-           <button onClick={generateSecretCodes}>Play Game</button>
-
-      {/* codePegs display */}
-      <div>
-        {codePegs.slice(0, 6).map((code, index) => (
-          <button
-            className={`${Colors[code]} h-10 w-10 border-black border-2 rounded-full`}
-            key={index}
-            onClick={() => setSelectedCodePeg(code)}
-          ></button>
-        ))}
-      </div>
+      <BottomCodePegs setSelectedCodePeg={setSelectedCodePeg} codePegs={codePegs} />
     </div>
   );
 }
