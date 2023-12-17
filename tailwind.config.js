@@ -6,9 +6,19 @@ export default {
   ],
   theme: {
     extend: {
+      colors: {
+        'nb-blue' : '#3300FF',
+        'nb-pink': '#FF00f5',
+        'nb-yellow' : '#FFFF00',
+        'nb-red' : '#FF4911',
+        'nb-green' : '#2FFF2F'
+      },
+      gridTemplateColumns: {
+        'main' : 'minmax(200px, 1fr) minmax(50px, 150px)'
+      },
       keyframes: {
         blink: {
-          '50%' :  {opacity: .7}
+          '50%' :  {borderColor: 'rgb(245 158 11)'}
         }
       },
       animation: {
