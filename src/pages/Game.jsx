@@ -171,7 +171,7 @@ export default function Game() {
             guessRowScores.push("BL");
 
             //the index of all all matched code will be added to MATCH CODE INDEX
-            //so that the next interation does index will be skip
+            //so that the next interation those index will be skip
             MATCH_CODE_INDEX.push(secretCodeIndex);
           }
         }
@@ -190,7 +190,7 @@ export default function Game() {
             guessRowScores.push("AM");
 
             //the index of all all matched code will be added to MATCH CODE INDEX
-            //so that the next interation does index will be skip
+            //so that the next interation those index will be skip
             MATCH_CODE_INDEX.push(secretCodeIndex);
           }
         }
@@ -207,7 +207,7 @@ export default function Game() {
     setScoreBoard(newScoreBoard);
   }
 
-  //if currentGuessRow array is equal to secretCodes if not procced to next attemp
+  //if currentGuessRow array is equal to secretCodes array return true
   function isWin() {
     const guess = decodingBoard[currentGuessRow];
     for (let i = 0; i < guess.length; i++) {
