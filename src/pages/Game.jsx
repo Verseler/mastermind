@@ -102,6 +102,8 @@ export default function Game() {
     //generate secret code for this game
     generateSecretCodes();
     setWinCurrentGame(false);
+    //restart attemptRemaining
+    setCurrentGuessRow(0);
   }
 
   function generateSecretCodes() {
