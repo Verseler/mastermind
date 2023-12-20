@@ -135,8 +135,6 @@ export default function Game() {
       } else {
         newDecodingBoard[rowIndex][colIndex] = EMPTY;
       }
-      console.log(secretCodes)
-      console.log(newDecodingBoard[rowIndex])
       setDecodingBoard(newDecodingBoard);
     }
 
@@ -176,7 +174,8 @@ export default function Game() {
 
             //the index of all all matched code will be added to MATCH CODE INDEX
             //so that the next interation does index will be skip
-            MATCH_CODE_INDEX.push(secretCodeIndex);
+            MATCH_CODE_SECRET_INDEX.push(secretCodeIndex);
+            MATCH_CODE_GUESS_INDEX.push(guessCodeIndex);
           }
         }
       });
@@ -198,7 +197,8 @@ export default function Game() {
 
             //the index of all all matched code will be added to MATCH CODE INDEX
             //so that the next interation does index will be skip
-            MATCH_CODE_INDEX.push(secretCodeIndex);
+            MATCH_CODE_SECRET_INDEX.push(secretCodeIndex);
+            MATCH_CODE_GUESS_INDEX.push(guessCodeIndex);
           }
         }
       });
