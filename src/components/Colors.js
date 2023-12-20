@@ -8,5 +8,6 @@ export default {
   "RD" : "bg-nb-red",
   "GN" : "bg-nb-green",
   "BL" : "bg-black",
-  "AM" : "bg-amber-500"
+  "AM" : "bg-amber-500",
+  "GY" : "bg-gray-400",
 }

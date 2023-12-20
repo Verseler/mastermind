@@ -5,31 +5,30 @@ import ScoreBoard from "../components/ScoreBoard";
 import DecodingBoard from "../components/DecodingBoard";
 import SecretCodes from "../components/SecretCodes";
 import NewGameDialog from "../components/NewGameDialog";
-import { useLocation } from "react-router-dom";
 
 export default function Game() {
   useEffect(() => {
     startGame();
-    
+
     //handle keyboard press
     const handleKeyPress = (event) => {
       switch (event.key) {
-        case '1':
+        case "1":
           setSelectedCodePeg(codePegs[0]);
           break;
-        case '2':
+        case "2":
           setSelectedCodePeg(codePegs[1]);
           break;
-        case '3':
+        case "3":
           setSelectedCodePeg(codePegs[2]);
           break;
-        case '4':
+        case "4":
           setSelectedCodePeg(codePegs[3]);
           break;
-        case '5':
+        case "5":
           setSelectedCodePeg(codePegs[4]);
           break;
-        case '6':
+        case "6":
           setSelectedCodePeg(codePegs[5]);
           break;
         default:
@@ -37,9 +36,7 @@ export default function Game() {
           break;
       }
     };
-    document.body.addEventListener('keydown', handleKeyPress);
-
-
+    document.body.addEventListener("keydown", handleKeyPress);
 
     //handle refresh web
     const handleBeforeUnload = (event) => {
@@ -49,7 +46,7 @@ export default function Game() {
     //clean up
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
-      document.body.removeEventListener('keydown', handleKeyPress);
+      document.body.removeEventListener("keydown", handleKeyPress);
     };
   }, []);
 
@@ -100,7 +97,8 @@ export default function Game() {
       prevScoreBoard.map((scoreRow) => scoreRow.map((score) => (score = EMPTY)))
     );
     //generate secret code for this game
-    generateSecretCodes();
+    // generateSecretCodes(); //temporary for testing
+    setSecretCodes(["GN", "GN", "PK", "YW"]);
     setWinCurrentGame(false);
     //restart attemptRemaining
     setCurrentGuessRow(0);
@@ -120,6 +118,7 @@ export default function Game() {
   }
 
   function makeGuess(rowIndex, colIndex) {
+ 
     //prevent making move when current game is already over
     if (winCurrentGame) return;
 
@@ -136,7 +135,8 @@ export default function Game() {
       } else {
         newDecodingBoard[rowIndex][colIndex] = EMPTY;
       }
-
+      console.log(secretCodes)
+      console.log(newDecodingBoard[rowIndex])
       setDecodingBoard(newDecodingBoard);
     }
 
@@ -157,14 +157,18 @@ export default function Game() {
 
   function giveScore(guessRowIndex) {
     const guessRowScores = [];
-    const MATCH_CODE_INDEX = [];
+    const MATCH_CODE_SECRET_INDEX = [];
+    const MATCH_CODE_GUESS_INDEX = [];
     const guessCodes = decodingBoard[guessRowIndex];
 
     //get the all correct Score
     secretCodes.forEach((secretCode, secretCodeIndex) => {
       guessCodes.forEach((guessCode, guessCodeIndex) => {
         //if index exist in MATCH CODE INDEX will be skip
-        if (!MATCH_CODE_INDEX.includes(secretCodeIndex)) {
+        if (
+          !MATCH_CODE_GUESS_INDEX.includes(guessCodeIndex) &&
+          !MATCH_CODE_SECRET_INDEX.includes(secretCodeIndex)
+        ) {
           //if same value and index matched
           if (secretCode === guessCode && secretCodeIndex === guessCodeIndex) {
             //add score for correct
@@ -172,7 +176,8 @@ export default function Game() {
 
             //the index of all all matched code will be added to MATCH CODE INDEX
             //so that the next interation does index will be skip
-            MATCH_CODE_INDEX.push(secretCodeIndex);
+            MATCH_CODE_SECRET_INDEX.push(secretCodeIndex);
+            MATCH_CODE_GUESS_INDEX.push(guessCodeIndex);
           }
         }
       });
@@ -182,16 +187,20 @@ export default function Game() {
     secretCodes.forEach((secretCode, secretCodeIndex) => {
       guessCodes.forEach((guessCode, guessCodeIndex) => {
         //if index exist in MATCH CODE INDEX will be skip
-        if (!MATCH_CODE_INDEX.includes(secretCodeIndex)) {
+        if (
+          !MATCH_CODE_GUESS_INDEX.includes(guessCodeIndex) &&
+          !MATCH_CODE_SECRET_INDEX.includes(secretCodeIndex)
+        ) {
           //all matched value and index are already recorded
           //count all matched in value but not the index
           if (secretCode === guessCode) {
             //add score for misplaced
-            guessRowScores.push("AM");
+            guessRowScores.push("GY");
 
             //the index of all all matched code will be added to MATCH CODE INDEX
             //so that the next interation does index will be skip
-            MATCH_CODE_INDEX.push(secretCodeIndex);
+            MATCH_CODE_SECRET_INDEX.push(secretCodeIndex);
+            MATCH_CODE_GUESS_INDEX.push(guessCodeIndex);
           }
         }
       });
