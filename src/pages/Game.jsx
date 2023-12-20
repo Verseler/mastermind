@@ -97,8 +97,8 @@ export default function Game() {
       prevScoreBoard.map((scoreRow) => scoreRow.map((score) => (score = EMPTY)))
     );
     //generate secret code for this game
-    // generateSecretCodes(); //temporary for testing
-    setSecretCodes(["GN", "GN", "PK", "YW"]);
+    generateSecretCodes(); 
+   
     setWinCurrentGame(false);
     //restart attemptRemaining
     setCurrentGuessRow(0);
