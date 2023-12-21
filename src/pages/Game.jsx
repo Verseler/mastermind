@@ -227,46 +227,44 @@ export default function Game() {
   }
 
   return (
-    <div className="flex flex-col h-screen">
-      <Header />
-      <main className="relative flex-1">
-        <div className="absolute h-[5.5vh] inset-x-0 flex justify-center w-full gap-2 top-4">
-          <SecretCodes
-            secretCodes={secretCodes}
-            winCurrentGame={winCurrentGame}
-            remainingAttempt={10 - currentGuessRow}
-          />
-          <div className="w-[5vh] text-2xl font-bold text-center">
-            <p>{10 - currentGuessRow}</p>
+   
+      <div className="flex flex-col h-screen">
+        <Header />
+        <main className="relative flex-1">
+          <div className="absolute h-[5.5vh] inset-x-0 flex justify-center w-full gap-2 top-4">
+            <SecretCodes
+              secretCodes={secretCodes}
+              winCurrentGame={winCurrentGame}
+              remainingAttempt={10 - currentGuessRow}
+            />
+            <div className="w-[5vh] text-2xl font-bold text-center">
+              <p>{10 - currentGuessRow}</p>
+            </div>
           </div>
-        </div>
-
-        <div className="flex items-center justify-center h-full gap-2 pt-6">
-          <DecodingBoard
-            decodingBoard={decodingBoard}
-            makeGuess={makeGuess}
-            currentGuessRow={currentGuessRow}
-          />
-
-          <ScoreBoard scoreBoard={scoreBoard} />
-        </div>
-
-        {/*display when game is over*/}
-        {winCurrentGame || 10 - currentGuessRow === 10 ? (
-          <NewGameDialog
-            winCurrentGame={winCurrentGame}
-            startGame={startGame}
-            remainingAttempt={10 - currentGuessRow}
-          />
-        ) : (
-          ""
-        )}
-      </main>
-
-      <BottomCodePegs
-        setSelectedCodePeg={setSelectedCodePeg}
-        codePegs={codePegs}
-      />
-    </div>
+          <div className="flex items-center justify-center h-full gap-2 pt-6">
+            <DecodingBoard
+              decodingBoard={decodingBoard}
+              makeGuess={makeGuess}
+              currentGuessRow={currentGuessRow}
+            />
+            <ScoreBoard scoreBoard={scoreBoard} />
+          </div>
+          {/*display when game is over*/}
+          {winCurrentGame || 10 - currentGuessRow === 10 ? (
+            <NewGameDialog
+              winCurrentGame={winCurrentGame}
+              startGame={startGame}
+              remainingAttempt={10 - currentGuessRow}
+            />
+          ) : (
+            ""
+          )}
+        </main>
+        <BottomCodePegs
+          setSelectedCodePeg={setSelectedCodePeg}
+          codePegs={codePegs}
+        />
+      </div>
+   
   );
 }
