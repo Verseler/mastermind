@@ -5,7 +5,7 @@ export default function Tile(props) {
     <div
       className={`${props.bgColor} ${
         props.hasChild ? "border-amber-300 border-4" : "border-black border-2"
-      }  min-w-[2.3rem] min-h-[2.3rem] rounded-md`}
+      }  min-w-[2.3rem] min-h-[2.3rem] h-[5.5vh] w-[6vh] rounded-md`}
     >
       {props.hasChild && (
         <img className="object-contain w-full h-full" src={questionIcon} />

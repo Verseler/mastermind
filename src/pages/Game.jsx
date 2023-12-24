@@ -5,8 +5,22 @@ import ScoreBoard from "../components/ScoreBoard";
 import DecodingBoard from "../components/DecodingBoard";
 import SecretCodes from "../components/SecretCodes";
 import NewGameDialog from "../components/NewGameDialog";
+import Difficulty from "../components/Difficulty";
 
 export default function Game() {
+  const EMPTY = "empty";
+  const [decodingBoard, setDecodingBoard] = useState([]);
+  const [scoreBoard, setScoreBoard] = useState([]);
+
+  //code pegs - it is equal to color that is use to guess and play the game
+  const codePegs = ["BU", "PK", "GN", "RD", "VL", "YW", "OR"];
+
+  const [selectedCodePeg, setSelectedCodePeg] = useState(codePegs[0]);
+  const [secretCodes, setSecretCodes] = useState([]);
+  const [currentGuessRow, setCurrentGuessRow] = useState(0);
+  const [winCurrentGame, setWinCurrentGame] = useState(false);
+  const [currentDifficulty, setCurrentDifficulty] = useState(Difficulty[0]);
+
   useEffect(() => {
     startGame();
 
@@ -48,68 +62,52 @@ export default function Game() {
       window.removeEventListener("beforeunload", handleBeforeUnload);
       document.body.removeEventListener("keydown", handleKeyPress);
     };
-  }, []);
+  }, [currentDifficulty]);
 
-  const EMPTY = "empty";
-  const [decodingBoard, setDecodingBoard] = useState([
-    //each of these arrays are called guessRow
-    [EMPTY, EMPTY, EMPTY, EMPTY],
-    [EMPTY, EMPTY, EMPTY, EMPTY],
-    [EMPTY, EMPTY, EMPTY, EMPTY],
-    [EMPTY, EMPTY, EMPTY, EMPTY],
-    [EMPTY, EMPTY, EMPTY, EMPTY],
-    [EMPTY, EMPTY, EMPTY, EMPTY],
-    [EMPTY, EMPTY, EMPTY, EMPTY],
-    [EMPTY, EMPTY, EMPTY, EMPTY],
-    [EMPTY, EMPTY, EMPTY, EMPTY],
-    [EMPTY, EMPTY, EMPTY, EMPTY],
-  ]);
-  const [scoreBoard, setScoreBoard] = useState([
-    //each one of this is connected to each guessRow in decondingBoard
-    [EMPTY, EMPTY, EMPTY, EMPTY],
-    [EMPTY, EMPTY, EMPTY, EMPTY],
-    [EMPTY, EMPTY, EMPTY, EMPTY],
-    [EMPTY, EMPTY, EMPTY, EMPTY],
-    [EMPTY, EMPTY, EMPTY, EMPTY],
-    [EMPTY, EMPTY, EMPTY, EMPTY],
-    [EMPTY, EMPTY, EMPTY, EMPTY],
-    [EMPTY, EMPTY, EMPTY, EMPTY],
-    [EMPTY, EMPTY, EMPTY, EMPTY],
-    [EMPTY, EMPTY, EMPTY, EMPTY],
-  ]);
 
-  //code pegs - it is equal to color that is use to guess and play the game
-  const codePegs = ["BU", "PK", "GN", "RD", "VL", "YW", "OR"];
 
-  const [selectedCodePeg, setSelectedCodePeg] = useState(codePegs[0]);
-  const [secretCodes, setSecretCodes] = useState([]);
-  const [currentGuessRow, setCurrentGuessRow] = useState(0);
-  const [winCurrentGame, setWinCurrentGame] = useState(false);
+  
 
   function startGame() {
+    //initialized board
+    setDecodingBoard(createBoard(currentDifficulty.boardColSize));
+    setScoreBoard(createBoard(currentDifficulty.boardColSize));
+
     //clear boards
-    setDecodingBoard((prevDecodingBoard) =>
-      prevDecodingBoard.map((guessRow) =>
-        guessRow.map((colCode) => (colCode = EMPTY))
-      )
-    );
-    setScoreBoard((prevScoreBoard) =>
-      prevScoreBoard.map((scoreRow) => scoreRow.map((score) => (score = EMPTY)))
-    );
+    setDecodingBoard((prevDecodingBoard) => clearBoard(prevDecodingBoard));
+    setScoreBoard((prevScoreBoard) => clearBoard(prevScoreBoard));
+
     //generate secret code for this game
-    generateSecretCodes(); 
-   
+    generateSecretCodes(
+      currentDifficulty.boardColSize,
+      currentDifficulty.codePegsSize
+    );
+
     setWinCurrentGame(false);
     //restart attemptRemaining
     setCurrentGuessRow(0);
   }
 
-  function generateSecretCodes() {
+  const createBoard = (colSize) =>
+    new Array(10).fill(Array(colSize).fill(EMPTY));
+    
+  const clearBoard = (board) =>
+    board.map((guessRow) => guessRow.map((colCode) => (colCode = EMPTY)));
+
+
+
+  function setNewLevel(index) {
+    const newLevel = Difficulty[index];
+    setCurrentDifficulty(newLevel);
+  }
+  
+  
+  function generateSecretCodes(colSize, maxColorPegSize) {
     let newSecretCodes = [];
 
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < colSize; i++) {
       const min = 0;
-      const max = 5;
+      const max = maxColorPegSize - 1; //-1 because min start from 0 not 1
       const randomNum = Math.floor(Math.random() * (max - min + 1) + min);
       newSecretCodes.push(codePegs[randomNum]);
     }
@@ -118,7 +116,6 @@ export default function Game() {
   }
 
   function makeGuess(rowIndex, colIndex) {
- 
     //prevent making move when current game is already over
     if (winCurrentGame) return;
 
@@ -205,7 +202,7 @@ export default function Game() {
     });
 
     //add empty to guessRowScores for the incorrect guesses
-    while (guessRowScores.length < 4) {
+    while (guessRowScores.length < currentDifficulty.boardColSize) {
       guessRowScores.push(EMPTY);
     }
 
@@ -225,46 +222,51 @@ export default function Game() {
 
     return true;
   }
-
+  
   return (
-   
-      <div className="flex flex-col h-screen">
-        <Header />
-        <main className="relative flex-1">
-          <div className="absolute h-[5.5vh] inset-x-0 flex justify-center w-full gap-2 top-4">
-            <SecretCodes
-              secretCodes={secretCodes}
-              winCurrentGame={winCurrentGame}
-              remainingAttempt={10 - currentGuessRow}
-            />
-            <div className="w-[5vh] text-2xl font-bold text-center">
-              <p>{10 - currentGuessRow}</p>
-            </div>
+    <div className="flex flex-col h-screen">
+      <Header currentLevel={currentDifficulty.level} setNewLevel={setNewLevel} />
+      <main className="relative flex flex-col items-center justify-around flex-1">
+        <div className="flex justify-center w-full gap-2">
+          <SecretCodes
+            secretCodes={secretCodes}
+            winCurrentGame={winCurrentGame}
+            remainingAttempt={10 - currentGuessRow}
+            colSize={currentDifficulty.boardColSize}
+          />
+          <div className="text-2xl font-bold md:text-3xl text-center w-[6vh]">
+            <p>{10 - currentGuessRow}</p>
           </div>
-          <div className="flex items-center justify-center h-full gap-2 pt-6">
-            <DecodingBoard
-              decodingBoard={decodingBoard}
-              makeGuess={makeGuess}
-              currentGuessRow={currentGuessRow}
-            />
-            <ScoreBoard scoreBoard={scoreBoard} />
-          </div>
-          {/*display when game is over*/}
-          {winCurrentGame || 10 - currentGuessRow === 10 ? (
-            <NewGameDialog
-              winCurrentGame={winCurrentGame}
-              startGame={startGame}
-              remainingAttempt={10 - currentGuessRow}
-            />
-          ) : (
-            ""
-          )}
-        </main>
-        <BottomCodePegs
-          setSelectedCodePeg={setSelectedCodePeg}
-          codePegs={codePegs}
-        />
-      </div>
-   
+        </div>
+        <div className="flex items-center justify-center gap-2">
+          <DecodingBoard
+            decodingBoard={decodingBoard}
+            makeGuess={makeGuess}
+            currentGuessRow={currentGuessRow}
+            colSize={currentDifficulty.boardColSize}
+          />
+          <ScoreBoard
+            scoreBoard={scoreBoard}
+            level={currentDifficulty.level}
+            colSize={currentDifficulty.boardColSize}
+          />
+        </div>
+        {/*display when game is over*/}
+        {winCurrentGame || 10 - currentGuessRow === 10 ? (
+          <NewGameDialog
+            winCurrentGame={winCurrentGame}
+            startGame={startGame}
+            remainingAttempt={10 - currentGuessRow}
+          />
+        ) : (
+          ""
+        )}
+      </main>
+      <BottomCodePegs
+        setSelectedCodePeg={setSelectedCodePeg}
+        codePegs={codePegs}
+        difficultyCodePegsSize={currentDifficulty.codePegsSize}
+      />
+    </div>
   );
 }

@@ -11,7 +11,8 @@ export default {
         'nb-pink': '#FF00f5',
         'nb-yellow' : '#FFFF00',
         'nb-red' : '#FF4911',
-        'nb-green' : '#2FFF2F'
+        'nb-green' : '#2FFF2F',
+        'nb-orange' : '#ffbf00',
       },
       gridTemplateColumns: {
         'main' : 'minmax(200px, 1fr) minmax(50px, 150px)'

@@ -2,7 +2,7 @@ export default {
   "empty" : "bg-amber-50",
   "BU" : "bg-nb-blue",
   "PK" : "bg-nb-pink",
-  "OR" : "bg-orange-500",
+  "OR" : "bg-nb-orange",
   "VL" : "bg-violet-500",
   "YW" : "bg-nb-yellow",
   "RD" : "bg-nb-red",
