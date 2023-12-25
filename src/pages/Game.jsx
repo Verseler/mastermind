@@ -64,10 +64,6 @@ export default function Game() {
     };
   }, [currentDifficulty]);
 
-
-
-  
-
   function startGame() {
     //initialized board
     setDecodingBoard(createBoard(currentDifficulty.boardColSize));
@@ -90,18 +86,15 @@ export default function Game() {
 
   const createBoard = (colSize) =>
     new Array(10).fill(Array(colSize).fill(EMPTY));
-    
+
   const clearBoard = (board) =>
     board.map((guessRow) => guessRow.map((colCode) => (colCode = EMPTY)));
-
-
 
   function setNewLevel(index) {
     const newLevel = Difficulty[index];
     setCurrentDifficulty(newLevel);
   }
-  
-  
+
   function generateSecretCodes(colSize, maxColorPegSize) {
     let newSecretCodes = [];
 
@@ -222,10 +215,30 @@ export default function Game() {
 
     return true;
   }
-  
+
+  function NewGameDialogUI() {
+    if (winCurrentGame) {
+      return (
+        <NewGameDialog
+          message="You break the code. Play again?"
+          startGame={startGame}
+        />
+      );
+    }
+    else if (currentGuessRow === 10) {
+      return (
+        <NewGameDialog message="You lose. STUPID!" startGame={startGame} />
+      );
+    }
+    return; //return nothing 
+  }
+
   return (
     <div className="flex flex-col h-screen">
-      <Header currentLevel={currentDifficulty.level} setNewLevel={setNewLevel} />
+      <Header
+        currentLevel={currentDifficulty.level}
+        setNewLevel={setNewLevel}
+      />
       <main className="relative flex flex-col items-center justify-around flex-1">
         <div className="flex justify-center w-full gap-2">
           <SecretCodes
@@ -252,15 +265,7 @@ export default function Game() {
           />
         </div>
         {/*display when game is over*/}
-        {winCurrentGame || 10 - currentGuessRow === 10 ? (
-          <NewGameDialog
-            winCurrentGame={winCurrentGame}
-            startGame={startGame}
-            remainingAttempt={10 - currentGuessRow}
-          />
-        ) : (
-          ""
-        )}
+        {NewGameDialogUI()}
       </main>
       <BottomCodePegs
         setSelectedCodePeg={setSelectedCodePeg}
