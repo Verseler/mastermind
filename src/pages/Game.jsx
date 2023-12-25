@@ -240,18 +240,18 @@ export default function Game() {
         setNewLevel={setNewLevel}
       />
       <main className="relative flex flex-col items-center justify-around flex-1">
-        <div className="flex justify-center w-full gap-2">
+        <div className="flex justify-center w-full gap-4">
           <SecretCodes
             secretCodes={secretCodes}
             winCurrentGame={winCurrentGame}
             remainingAttempt={10 - currentGuessRow}
             colSize={currentDifficulty.boardColSize}
           />
-          <div className="text-2xl font-bold md:text-3xl text-center w-[6vh]">
+          <div className="text-2xl font-bold md:text-3xl w-[6vh]">
             <p>{10 - currentGuessRow}</p>
           </div>
         </div>
-        <div className="flex items-center justify-center gap-2">
+        <div className="flex items-center justify-center gap-4">
           <DecodingBoard
             decodingBoard={decodingBoard}
             makeGuess={makeGuess}
