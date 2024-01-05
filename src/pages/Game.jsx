@@ -104,7 +104,6 @@ export default function Game() {
       const randomNum = Math.floor(Math.random() * (max - min + 1) + min);
       newSecretCodes.push(codePegs[randomNum]);
     }
-    console.log(newSecretCodes);
     setSecretCodes(newSecretCodes);
   }
 
@@ -234,7 +233,7 @@ export default function Game() {
   }
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col min-h-screen ">
       <Header
         currentLevel={currentDifficulty.level}
         setNewLevel={setNewLevel}
