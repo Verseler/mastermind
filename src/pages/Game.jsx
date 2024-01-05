@@ -223,13 +223,12 @@ export default function Game() {
           startGame={startGame}
         />
       );
-    }
-    else if (currentGuessRow === 10) {
+    } else if (currentGuessRow === 10) {
       return (
         <NewGameDialog message="You lose. STUPID!" startGame={startGame} />
       );
     }
-    return; //return nothing 
+    return; //return nothing
   }
 
   return (
@@ -238,8 +237,8 @@ export default function Game() {
         currentLevel={currentDifficulty.level}
         setNewLevel={setNewLevel}
       />
-      <main className="relative flex flex-col items-center justify-around flex-1">
-        <div className="flex justify-center w-full gap-4">
+      <main className="relative flex flex-col items-center justify-between flex-1 sm:justify-around">
+        <div className="flex justify-center w-full gap-4 mt-3 sm:mt-0">
           <SecretCodes
             secretCodes={secretCodes}
             winCurrentGame={winCurrentGame}
@@ -265,12 +264,12 @@ export default function Game() {
         </div>
         {/*display when game is over*/}
         {NewGameDialogUI()}
+        <BottomCodePegs
+          setSelectedCodePeg={setSelectedCodePeg}
+          codePegs={codePegs}
+          difficultyCodePegsSize={currentDifficulty.codePegsSize}
+        />
       </main>
-      <BottomCodePegs
-        setSelectedCodePeg={setSelectedCodePeg}
-        codePegs={codePegs}
-        difficultyCodePegsSize={currentDifficulty.codePegsSize}
-      />
     </div>
   );
 }

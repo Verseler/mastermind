@@ -7,7 +7,7 @@ export default function BottomCodePegs({
   difficultyCodePegsSize,
 }) {
   return (
-    <div className="grid place-content-center w-full h-[9vh] bg-yellow-200 sm:bg-transparent sm:h-28 sm:items-start">
+    <div className="grid w-full bg-yellow-200 place-content-center min-h-max sm:bg-transparent sm:min-h-max sm:items-start">
       <div
         className={`${
           difficultyCodePegsSize === 6 ? "grid-cols-6" : "grid-cols-7"
