@@ -4,9 +4,9 @@ import Difficulty from "./Difficulty";
 export default function Header({ currentLevel, setNewLevel }) {
   const [showLevelOptions, setShowLevelOptions] = useState(false);
   const COLORS = {
-    Easy: "text-green-500",
-    Intermediate: "text-yellow-500",
-    Hard: "text-red-500",
+    Easy: "green-500",
+    Intermediate: "yellow-500",
+    Hard: "red-500",
   };
 
   function handleShowLevelOptions() {
@@ -27,9 +27,9 @@ export default function Header({ currentLevel, setNewLevel }) {
                 handleShowLevelOptions();
               }}
               key={index}
-              className={`${COLORS[difficulty.level]} ${
+              className={`text-${COLORS[difficulty.level]} ${
                 currentLevel === difficulty.level && "font-extrabold"
-              } cursor-pointer`}
+              } cursor-pointer transition-transform active:scale-90`}
             >
               {difficulty.level}
             </span>
@@ -42,12 +42,12 @@ export default function Header({ currentLevel, setNewLevel }) {
   return (
     <header className="relative flex items-center px-5 bg-yellow-200 h-14">
       <div className="flex justify-between w-full sm:m-auto sm:w-4/5 max-w-7xl">
-        <p className="text-lg font-bold cursor-pointer">MASTERMIND</p>
+        <p className="text-lg font-bold">MASTERMIND</p>
         <div className="ml-auto">
           <ul className="flex justify-end w-full gap-7">
-            <li onClick={handleShowLevelOptions} className="cursor-pointer">
+            <li onClick={handleShowLevelOptions} className={`transition-transform border-${COLORS[currentLevel]} cursor-pointer hover:border-b-2 active:scale-90`}>
               <span className="hidden sm:inline">Difficulty{" "}</span>
-              <span className={COLORS[currentLevel]}>{currentLevel}</span>
+              <span className={`text-${COLORS[currentLevel]}`}>{currentLevel}</span>
             </li>
             {showLevelOptions && levelOptionsUI()}
           </ul>
