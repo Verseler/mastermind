@@ -6,6 +6,7 @@ import DecodingBoard from "../components/DecodingBoard";
 import SecretCodes from "../components/SecretCodes";
 import NewGameDialog from "../components/NewGameDialog";
 import Difficulty from "../components/Difficulty";
+import Confetti from "react-confetti";
 
 export default function Game() {
   const EMPTY = "empty";
@@ -237,6 +238,7 @@ export default function Game() {
         currentLevel={currentDifficulty.level}
         setNewLevel={setNewLevel}
       />
+      {winCurrentGame && <Confetti />}
       <main className="relative flex flex-col items-center justify-between flex-1 sm:justify-around">
         <div className="flex justify-center w-full gap-4 mt-3 sm:mt-0">
           <SecretCodes
