@@ -20,10 +20,10 @@ export default {
       keyframes: {
         blink: {
           '50%' :  {borderColor: 'rgb(245 158 11)'}
-        }
+        },
       },
       animation: {
-        blinking: 'blink 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;'
+        blinking: 'blink 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;',
       }
     },
   },

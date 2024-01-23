@@ -304,6 +304,7 @@ export default function Game() {
         {/*display when game is over*/}
         {NewGameDialogUI()}
         <BottomCodePegs
+          selectedColorPeg={selectedCodePeg}
           setSelectedCodePeg={setSelectedCodePeg}
           codePegs={codePegs}
           difficultyCodePegsSize={currentDifficulty.codePegsSize}

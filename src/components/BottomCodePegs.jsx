@@ -2,6 +2,7 @@ import Colors from "../utilities/Colors";
 import ClickableTile from "./ClickableTile";
 
 export default function BottomCodePegs({
+  selectedColorPeg,
   setSelectedCodePeg,
   codePegs,
   difficultyCodePegsSize,
@@ -14,11 +15,11 @@ export default function BottomCodePegs({
         } grid justify-center gap-1 min-h-[9vh] min-w-[44vh] rounded-lg sm:border-black sm:border-2 bg-yellow-200 py-3 px-5`}
       >
         {codePegs.slice(0, difficultyCodePegsSize).map((code, index) => (
-          <ClickableTile
+            <ClickableTile
             key={index}
             onClickAction={() => setSelectedCodePeg(code)}
-            conditionStyles={""}
             bgColor={Colors[code]}
+            selected={selectedColorPeg === code}
           />
         ))}
       </div>
