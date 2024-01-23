@@ -1,4 +1,4 @@
-import Colors from "./Colors";
+import Colors from "../utilities/Colors";
 import ClickableTile from "./ClickableTile";
 
 export default function BottomCodePegs({

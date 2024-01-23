@@ -5,15 +5,18 @@ import ScoreBoard from "../components/ScoreBoard";
 import DecodingBoard from "../components/DecodingBoard";
 import SecretCodes from "../components/SecretCodes";
 import NewGameDialog from "../components/NewGameDialog";
-import Difficulty from "../components/Difficulty";
+import Difficulty from "../utilities/Difficulty";
 import Confetti from "react-confetti";
+import GameGuideDialog from "../components/GameGuideDialog";
 
 export default function Game() {
   const EMPTY = "empty";
   const [decodingBoard, setDecodingBoard] = useState([]);
   const [scoreBoard, setScoreBoard] = useState([]);
 
-  //code pegs - it is equal to color that is use to guess and play the game
+  const [showGuideDialog, setShowGuideDialog] = useState(false);
+
+  //code pegs - it is equal to box color that is use to guess and play the game
   const codePegs = ["BU", "PK", "GN", "RD", "VL", "YW", "OR"];
 
   const [selectedCodePeg, setSelectedCodePeg] = useState(codePegs[0]);
@@ -22,37 +25,31 @@ export default function Game() {
   const [winCurrentGame, setWinCurrentGame] = useState(false);
   const [currentDifficulty, setCurrentDifficulty] = useState(Difficulty[0]);
 
+
+  /*
+   * 
+   * Show guide if users havent see it for the first time in its device  
+   * 
+   */
+  useEffect(() => {
+    //if user haven see the guide for the first time
+    //show guide
+    if(!localStorage.getItem('watchedGuide')) {
+     localStorage.setItem('watchedGuide', true);
+     
+     showGuide();
+    }
+  },[]);
+
+
+  /*
+   * 
+   * Every first web load start the game
+   * IF current difficulty level is change then restart the game
+   *  
+   */
   useEffect(() => {
     startGame();
-
-    //handle keyboard press
-    const handleKeyPress = (event) => {
-      switch (event.key) {
-        case "1":
-          setSelectedCodePeg(codePegs[0]);
-          break;
-        case "2":
-          setSelectedCodePeg(codePegs[1]);
-          break;
-        case "3":
-          setSelectedCodePeg(codePegs[2]);
-          break;
-        case "4":
-          setSelectedCodePeg(codePegs[3]);
-          break;
-        case "5":
-          setSelectedCodePeg(codePegs[4]);
-          break;
-        case "6":
-          setSelectedCodePeg(codePegs[5]);
-          break;
-        default:
-          // Handle other keys if needed
-          break;
-      }
-    };
-    document.body.addEventListener("keydown", handleKeyPress);
-
     //handle refresh web
     const handleBeforeUnload = (event) => {
       event.preventDefault();
@@ -61,10 +58,14 @@ export default function Game() {
     //clean up
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
-      document.body.removeEventListener("keydown", handleKeyPress);
     };
   }, [currentDifficulty]);
 
+  /*
+   *
+   * This start game. It is use for playing new game after a round
+   *
+   */
   function startGame() {
     //initialized board
     setDecodingBoard(createBoard(currentDifficulty.boardColSize));
@@ -96,18 +97,28 @@ export default function Game() {
     setCurrentDifficulty(newLevel);
   }
 
+  /*
+   *
+   * This generate new secret code for the round
+   *
+   */
   function generateSecretCodes(colSize, maxColorPegSize) {
     let newSecretCodes = [];
 
     for (let i = 0; i < colSize; i++) {
-      const min = 0;
-      const max = maxColorPegSize - 1; //-1 because min start from 0 not 1
-      const randomNum = Math.floor(Math.random() * (max - min + 1) + min);
+      const max = maxColorPegSize;
+      const randomNum = Math.floor(Math.random() * max);
+
       newSecretCodes.push(codePegs[randomNum]);
     }
     setSecretCodes(newSecretCodes);
   }
 
+  /*
+   *
+   * This is the action that make the user make a guess when they click in the decoding board
+   *
+   */
   function makeGuess(rowIndex, colIndex) {
     //prevent making move when current game is already over
     if (winCurrentGame) return;
@@ -132,7 +143,6 @@ export default function Game() {
     if (decodingBoard[currentGuessRow].every((colCode) => colCode !== EMPTY)) {
       //verify guess if correct
       if (isWin()) {
-        console.log("WIN: You break the code");
         setWinCurrentGame(true);
       }
       //if not then proceed to next attempt
@@ -143,6 +153,12 @@ export default function Game() {
     }
   }
 
+  /*
+   *
+   * After current row attempt boxes are filled with color pegs
+   * If it is not correct this function will gives a score
+   *
+   */
   function giveScore(guessRowIndex) {
     const guessRowScores = [];
     const MATCH_CODE_SECRET_INDEX = [];
@@ -204,7 +220,12 @@ export default function Game() {
     setScoreBoard(newScoreBoard);
   }
 
-  //if currentGuessRow array is equal to secretCodes array return true
+  /*
+   *
+   * This check if current guess row of color pegs match with secret code
+   *
+   */
+  //if currentGuetruessRow array is equal to secretCodes array return
   function isWin() {
     const guess = decodingBoard[currentGuessRow];
     for (let i = 0; i < guess.length; i++) {
@@ -216,6 +237,20 @@ export default function Game() {
     return true;
   }
 
+  /*
+   *
+   * show guide menu
+   *
+   */
+  function showGuide() {
+    setShowGuideDialog(prevShowGuide => !prevShowGuide);
+  }
+
+  /*
+   *
+   * UI
+   *
+   */
   function NewGameDialogUI() {
     if (winCurrentGame) {
       return (
@@ -237,9 +272,11 @@ export default function Game() {
       <Header
         currentLevel={currentDifficulty.level}
         setNewLevel={setNewLevel}
+        showGuideDialog={showGuide}
       />
       {winCurrentGame && <Confetti />}
       <main className="relative flex flex-col items-center justify-between flex-1 sm:justify-around">
+        {showGuideDialog && <GameGuideDialog onClickAction={showGuide} />}
         <div className="flex justify-center w-full gap-4 mt-3 sm:mt-0">
           <SecretCodes
             secretCodes={secretCodes}

@@ -1,4 +1,4 @@
-import Colors from "./Colors";
+import Colors from "../utilities/Colors";
 
 export default function ScoreBoard({ scoreBoard, colSize, level }) {
   return (

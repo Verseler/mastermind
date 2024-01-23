@@ -1,4 +1,4 @@
-import Colors from "./Colors";
+import Colors from "../utilities/Colors";
 import Tile from "./Tile";
 
 export default function SecretCodes({secretCodes, winCurrentGame, remainingAttempt, colSize}) {
