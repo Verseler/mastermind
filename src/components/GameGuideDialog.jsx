@@ -9,9 +9,9 @@ import Button from "./CTAButton";
 export default function GameGuideDialog({onClickAction}) {
   return (
     <div className="fixed inset-0 z-30 grid h-full place-content-center bg-black/40">
-      <div  onClick={onClickAction} className="cursor-pointer relative w-screen h-screen overflow-x-scroll text-xl border-4 border-black sm:max-h-[500px] sm:max-w-2xl sm:rounded-xl p-10 bg-amber-200">
-        <div className="absolute top-6 right-4">
-          <span className="material-symbols-outlined">close</span>
+      <div className="cursor-pointer relative w-screen h-screen overflow-x-scroll text-xl border-4 border-black sm:max-h-[500px] sm:max-w-2xl sm:rounded-xl p-10 bg-amber-200">
+        <div onClick={onClickAction} className="absolute top-6 right-10">
+          <span className="fixed material-symbols-outlined">close</span>
         </div>
         <h1 className="mb-8 text-base font-bold text-center sm:text-xl">
           Welcome to <span className="block text-xl sm:text-3xl">MASTERMIND</span>
