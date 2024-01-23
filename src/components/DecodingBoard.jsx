@@ -16,6 +16,7 @@ export default function DecodingBoard({
           guessRow.map((colCode, colIndex) => (
             <ClickableTile
               key={colIndex}
+              code={colCode}
               onClickAction={() => makeGuess(rowIndex, colIndex)}
               conditionStyles={
                 decodingBoard[rowIndex][colIndex] === EMPTY &&

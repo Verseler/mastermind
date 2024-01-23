@@ -19,6 +19,7 @@ export default function BottomCodePegs({
             key={index}
             onClickAction={() => setSelectedCodePeg(code)}
             bgColor={Colors[code]}
+            code={code}
             selected={selectedColorPeg === code}
           />
         ))}

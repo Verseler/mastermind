@@ -17,7 +17,7 @@ export default function Game() {
   const [showGuideDialog, setShowGuideDialog] = useState(false);
 
   //code pegs - it is equal to box color that is use to guess and play the game
-  const codePegs = ["BU", "PK", "GN", "RD", "VL", "YW", "OR"];
+  const codePegs = ["BU", "PK", "GN", "RD", "VL", "OR", "YW"];
 
   const [selectedCodePeg, setSelectedCodePeg] = useState(codePegs[0]);
   const [secretCodes, setSecretCodes] = useState([]);
