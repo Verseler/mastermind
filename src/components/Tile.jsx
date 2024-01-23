@@ -9,7 +9,7 @@ export default function Tile(props) {
       } grid place-items-center min-w-[2.3rem] min-h-[2.3rem] h-[5.5vh] w-[6vh] rounded-md`}
     >
       {props.hasChild && (
-        <img className="object-contain h-5/6" src={questionIcon} />
+        <img className="object-contain h-5/6" src={questionIcon} alt="question mark" />
       )}
       {props.code && <span className={`${props.selected && 'text-slate-100'} font-medium`}>{CodeNumber[props.code]}</span>}
     </div>
