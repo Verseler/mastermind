@@ -44,10 +44,10 @@ export default function Header({ currentLevel, setNewLevel, showGuideDialog }) {
       <div className="flex items-center justify-between w-full sm:m-auto sm:w-4/5 max-w-7xl">
         <p className="text-lg font-bold">MASTERMIND</p>
         <div className="ml-auto">
-          <ul className="flex items-center justify-end w-full gap-4">
+          <ul className="flex items-center justify-end w-full gap-2 sm:gap-4">
             <li
               onClick={handleShowLevelOptions}
-              className={`transition-transform active:scale-90 cursor-pointer `}
+              className={`transition-transform text-sm sm:text-base active:scale-90 cursor-pointer `}
             >
               <span className="hidden sm:inline">Difficulty </span>
               <span className={COLORS[currentLevel]}>{currentLevel}</span>
