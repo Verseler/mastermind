@@ -284,7 +284,7 @@ export default function Game() {
             remainingAttempt={10 - currentGuessRow}
             colSize={currentDifficulty.boardColSize}
           />
-          <div className="text-2xl font-bold md:text-3xl w-[6vh]">
+          <div className="text-2xl font-bold text-center md:text-3xl w-[6vh]">
             <p>{10 - currentGuessRow}</p>
           </div>
         </div>
