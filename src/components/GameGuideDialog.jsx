@@ -10,8 +10,8 @@ import Button from "./CTAButton";
 export default function GameGuideDialog({ onClickAction }) {
   return (
     <div className="fixed inset-0 z-30 grid h-full place-content-center bg-black/40">
-      <div className="cursor-pointer relative w-screen h-screen overflow-x-scroll text-xl border-4 border-black sm:max-h-[500px] sm:max-w-2xl sm:rounded-xl p-10 bg-amber-200">
-        <div onClick={onClickAction} className="absolute top-6 right-10">
+      <div className=" relative w-screen h-screen overflow-x-scroll text-xl border-4 border-black sm:max-h-[500px] sm:max-w-2xl sm:rounded-xl p-10 bg-amber-200">
+        <div onClick={onClickAction} className="absolute cursor-pointer top-6 right-10">
           <span className="fixed material-symbols-outlined">close</span>
         </div>
         <h1 className="mb-8 text-base font-bold text-center sm:text-xl">
@@ -91,7 +91,7 @@ export default function GameGuideDialog({ onClickAction }) {
 
         <div className="grid w-full mt-8 place-items-center">
           <Button
-            onClickAction={() => onClickAction}
+            onClickAction={onClickAction}
             text="CLOSE"
             bgColor="bg-gray-200"
           />
