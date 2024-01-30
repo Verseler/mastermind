@@ -1,19 +1,24 @@
-import attemptsImg from "../assets/attempts.png";
-import codingpegsImg from "../assets/codingpegs.png";
-import decodingboardImg from "../assets/decodingboard.png";
-import scoreImg from "../assets/score.png";
-import secretImg from "../assets/secret.png";
-import winImg from "../assets/win.png";
+import Modal from "./Modal";
+import attemptsImg from "../assets/guide/attempts.png";
+import codingpegsImg from "../assets/guide/codingpegs.png";
+import decodingboardImg from "../assets/guide/decodingboard.png";
+import scoreImg from "../assets/guide/score.png";
+import secretImg from "../assets/guide/secret.png";
+import winImg from "../assets/guide/win.png";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import Button from "./CTAButton";
+import Button from "./Button";
 
-export default function GameGuideDialog({ onClickAction }) {
-  return (
-    <div className="fixed inset-0 z-30 grid h-full place-content-center bg-black/40">
-      <div className=" relative w-screen h-screen overflow-x-scroll text-xl border-4 border-black sm:max-h-[500px] sm:max-w-2xl sm:rounded-xl p-10 bg-amber-200">
-        <div onClick={onClickAction} className="absolute cursor-pointer top-6 right-10">
+export default function showGuideModal({handleShowGuideModal}) {
+  return(
+    <Modal className="relative w-screen h-screen  overflow-x-scroll text-xl border-4 border-black sm:max-h-[550px] sm:max-w-4xl sm:rounded-xl p-10 bg-amber-200">
+      <Button 
+        className="absolute cursor-pointer top-4 right-10"
+        type="ghost" 
+        onClickAction={handleShowGuideModal}
+        >
           <span className="fixed material-symbols-outlined">close</span>
-        </div>
+        </Button>
+
         <h1 className="mb-8 text-base font-bold text-center sm:text-xl">
           Welcome to{" "}
           <span className="block text-xl sm:text-3xl">MASTERMIND</span>
@@ -90,13 +95,15 @@ export default function GameGuideDialog({ onClickAction }) {
         </ol>
 
         <div className="grid w-full mt-8 place-items-center">
-          <Button
-            onClickAction={onClickAction}
-            text="CLOSE"
-            bgColor="bg-gray-200"
-          />
+        <Button 
+        className="text-sm font-bold border-2" 
+        type="outline" 
+        backgroundColor="bg-gray-100"
+        onClickAction={handleShowGuideModal}
+        >
+          CLOSE
+        </Button>
         </div>
-      </div>
-    </div>
+      </Modal>
   );
 }

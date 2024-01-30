@@ -1,16 +1,145 @@
-import Game from "./pages/Game";
-import TitleScreen from "./pages/TitleScreen";
-import { Routes, Route } from "react-router-dom";
+import Board from "./components/Board";
+import { getNewBoard } from "./utilities/board";
+import SecretCodes from "./components/SecretCodes";
+import CodePegOptions from "./components/CodePegOptions";
+import Difficulty from "./utilities/Difficulty";
+import { useEffect, useState } from "react";
+import { getCodePegs } from "./utilities/codePegs";
+import Header from "./components/Header";
+import AnnouncementModal from "./components/AnnouncementModal";
+import Confetti from "react-confetti";
 
 function App() {
+  const codePegOptions = getCodePegs();
+  const [selectedCodePeg, setSelectedCodePeg] = useState(getCodePegs()[0]);
+  const [winGame, setWinGame] = useState(false);
+  const [board, setBoard] = useState([]);
+  const [secretCodes, setSecretCodes] = useState([]);
+  const [selectedDifficulty, setSelectedDifficulty] = useState(Difficulty[0]);
+  const [currentAttempt, setCurrentAttempt] = useState(1);
+  const remainingAttempt = 11 - currentAttempt;
+
+  /*
+   * 
+   * Every first web load start the game
+   * IF current difficulty level is change then restart the game
+   *  
+   */
+  useEffect(() => {
+    //start game in first reload
+    startGame();
+    //handle refresh web
+    const handleBeforeUnload = (event) => {
+      event.preventDefault();
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    //clean up
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [selectedDifficulty]);
+
+
+  function startGame() {
+    setCurrentAttempt(1);
+    setWinGame(false);
+    generateSecretCodes(selectedDifficulty.maxCellSize, selectedDifficulty.maxCodePegs);
+    setBoard(getNewBoard(selectedDifficulty.maxCellSize));
+  }
+
+
+  /*
+   * generated new secret code
+   */
+    function generateSecretCodes(maxCellSize, maxCodePegs) {
+      let newSecretCodes = [];
+  
+      for (let i = 0; i < maxCellSize; i++) {
+        const maxNumberOfColors = maxCodePegs;
+        const randomNum = Math.floor(Math.random() * maxNumberOfColors);
+  
+        newSecretCodes.push(codePegOptions[randomNum]);
+      }
+      // secretCodes = newSecretCodes;
+      setSecretCodes(newSecretCodes);
+    }
+
+    
+  function setNewLevel(index) {
+    const newLevel = Difficulty[index];
+    setSelectedDifficulty(newLevel);
+  }
+
+
+  /* 
+  * 
+  * UI
+  *
+  */
+ const RemainingAttemptCount = () => {
+  return(
+    <div className={`${selectedDifficulty.level == "Hard" ? "w-[7vh]" : "w-[5vh]"} text-2xl font-bold text-center ms-3 md:text-3xl`}>
+    <p>{remainingAttempt}</p>
+  </div>
+  );
+ }
+
+ const NewGameDialogUI = () => {
+  if (winGame) {
+    return (
+      <>
+      <Confetti />
+      <AnnouncementModal
+        message="You break the code. Play again?"
+        startGame={startGame}
+      />
+      </>
+    );
+  } else if (remainingAttempt === 0) {
+    return (
+      <AnnouncementModal message="You lose. STUPID!" startGame={startGame} />
+    );
+  }
+  return; //return nothing
+}
 
   return (
-    <>
-    <Routes>
-      <Route path="/" element={<TitleScreen />} />
-      <Route path="Game" element={<Game />} />
-    </Routes>
-    </>
+    <div className="flex flex-col min-h-screen">
+      {/*display when game is over*/}
+      {NewGameDialogUI()}
+
+      <Header setNewLevel={setNewLevel} selectedDifficulty={selectedDifficulty} />  
+
+      <main className="flex flex-col items-center justify-between flex-1 sm:justify-around">
+        <div className="flex justify-center w-full gap-1 mt-3 sm:mt-0">
+          <SecretCodes
+            secretCodes={secretCodes}
+            remainingAttempt={remainingAttempt}
+            winGame={winGame}
+          />
+          {RemainingAttemptCount()}
+        </div>
+ 
+        <Board 
+          board={board}
+          setBoard={setBoard}
+          secretCodes={secretCodes}
+          selectedCodePeg={selectedCodePeg}
+          selectedDifficulty={selectedDifficulty} 
+          currentAttempt={currentAttempt} 
+          setCurrentAttempt={setCurrentAttempt}
+          winGame={winGame}
+          setWinGame={setWinGame}
+        />
+
+        <CodePegOptions
+          codePegOptions={codePegOptions}
+          selectedCodePeg={selectedCodePeg}
+          setSelectedCodePeg={setSelectedCodePeg}
+          selectedDifficulty={selectedDifficulty}
+        />
+      </main>
+    </div>
   );
 }
 

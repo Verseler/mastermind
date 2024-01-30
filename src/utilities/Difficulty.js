@@ -1,5 +1,5 @@
 export default [
-  { level: "Easy", boardColSize: 4, codePegsSize: 6 },
-  { level: "moderate", boardColSize: 4, codePegsSize: 7 },
-  { level: "Hard", boardColSize: 5, codePegsSize: 7 },
+  { level: "Easy", maxCodePegs: 6 , maxCellSize: 4, color: "text-green-500"},
+  { level: "moderate", maxCodePegs: 7, maxCellSize: 4, color: "text-yellow-500"},
+  { level: "Hard", maxCodePegs: 7 ,maxCellSize: 5, color: "text-red-500"}
 ];

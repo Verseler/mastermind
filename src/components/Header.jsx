@@ -1,43 +1,20 @@
 import { useState } from "react";
-import Difficulty from "../utilities/Difficulty";
+import ShowLevelOptionsModal from "./ShowLevelOptionsModal";
+import ShowGuideModal from "./ShowGuideModal";
+import Button from "./Button";
 
-export default function Header({ currentLevel, setNewLevel, showGuideDialog }) {
+export default function Header({ selectedDifficulty, setNewLevel }) {
   const [showLevelOptions, setShowLevelOptions] = useState(false);
-  const COLORS = {
-    Easy: "text-green-500",
-    moderate: "text-yellow-500",
-    Hard: "text-red-500",
-  };
+  const [showGuide, setShowGuide] = useState(false);
+  const currentLevel = selectedDifficulty.level;
 
-  function handleShowLevelOptions() {
+  function handleShowLevelOptionsModal() {
     setShowLevelOptions((prevShowLevelOptions) => !prevShowLevelOptions);
   }
 
-  const levelOptionsUI = () => {
-    return (
-      <div className="fixed inset-0 z-30 grid h-full place-content-center bg-black/40">
-        <div className="flex flex-col items-center justify-center w-screen h-screen gap-1 text-xl text-center border-4 border-black sm:w-max sm:h-max sm:rounded-xl sm:p-28 bg-amber-200">
-          <h1 className="mb-4 font-bold border-b-2 border-black">
-            DIFFICULTY LEVEL
-          </h1>
-          {Difficulty.map((difficulty, index) => (
-            <span
-              onClick={() => {
-                setNewLevel(index);
-                handleShowLevelOptions();
-              }}
-              key={index}
-              className={`${COLORS[difficulty.level]} ${
-                currentLevel === difficulty.level && "font-extrabold"
-              } cursor-pointer transition-transform active:scale-90`}
-            >
-              {difficulty.level}
-            </span>
-          ))}
-        </div>
-      </div>
-    );
-  };
+  function handleShowGuideModal() {
+    setShowGuide((prevShowGuide) => !prevShowGuide);
+  }
 
   return (
     <header className="relative flex items-center px-5 bg-yellow-200 h-14">
@@ -45,17 +22,32 @@ export default function Header({ currentLevel, setNewLevel, showGuideDialog }) {
         <p className="text-lg font-bold">MASTERMIND</p>
         <div className="ml-auto">
           <ul className="flex items-center justify-end w-full gap-2 sm:gap-4">
-            <li
-              onClick={handleShowLevelOptions}
-              className={`transition-transform text-sm sm:text-base active:scale-90 cursor-pointer `}
+            <Button
+                  className={`transition-transform text-sm sm:text-base`}
+              type="ghost"
+              onClickAction={handleShowLevelOptionsModal}
             >
               <span className="hidden sm:inline">Difficulty </span>
-              <span className={COLORS[currentLevel]}>{currentLevel}</span>
-            </li>
-            {showLevelOptions && levelOptionsUI()}
-            <div onClick={showGuideDialog}>
-              <span className="text-2xl cursor-pointer material-symbols-outlined text-nb-orange">help</span>
-            </div>
+              <span className={selectedDifficulty.color}>{currentLevel}</span>
+            </Button>
+            {showLevelOptions && (
+              <ShowLevelOptionsModal
+                setNewLevel={setNewLevel}
+                currentLevel={currentLevel}
+                handleShowLevelOptionsModal={handleShowLevelOptionsModal}
+              />
+            )}
+            {showGuide && (
+              <ShowGuideModal handleShowGuideModal={handleShowGuideModal} />
+            )}
+             <Button
+              type="ghost"
+              onClickAction={handleShowGuideModal}
+            >
+               <span className="text-2xl cursor-pointer material-symbols-outlined text-nb-orange">
+                help
+              </span>
+            </Button>
           </ul>
         </div>
       </div>
