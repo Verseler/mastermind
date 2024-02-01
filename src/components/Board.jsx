@@ -157,7 +157,7 @@ export default function Board({
           className="flex items-center justify-center gap-1"
         >
           <div 
-            className={`${row.attempt === currentAttempt ? "rounded-full outline-amber-300 outline": ""} 
+            className={`${row.attempt === currentAttempt ? "rounded-full outline-4 outline-amber-300 outline": ""} 
             flex gap-1`}
           >{CodeCells(row, index)}</div>
 {/*${cell === '' && row.attempt === currentAttempt ? "animate-blinking" : ""} */}
