@@ -3,18 +3,16 @@ import ShowLevelOptionsModal from "./ShowLevelOptionsModal";
 import ShowGuideModal from "./ShowGuideModal";
 import Button from "./Button";
 
-export default function Header({ selectedDifficulty, setNewLevel }) {
+export default function Header({ selectedDifficulty, showGuide, handleShowGuideModal }) {
   const [showLevelOptions, setShowLevelOptions] = useState(false);
-  const [showGuide, setShowGuide] = useState(false);
+  
   const currentLevel = selectedDifficulty.level;
 
   function handleShowLevelOptionsModal() {
     setShowLevelOptions((prevShowLevelOptions) => !prevShowLevelOptions);
   }
 
-  function handleShowGuideModal() {
-    setShowGuide((prevShowGuide) => !prevShowGuide);
-  }
+ 
 
   return (
     <header className="relative flex items-center px-5 bg-yellow-200 h-14">
