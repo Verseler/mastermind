@@ -3,7 +3,7 @@ import ShowLevelOptionsModal from "./ShowLevelOptionsModal";
 import ShowGuideModal from "./ShowGuideModal";
 import Button from "./Button";
 
-export default function Header({ selectedDifficulty, showGuide, handleShowGuideModal }) {
+export default function Header({ selectedDifficulty, showGuide, setNewLevel, handleShowGuideModal }) {
   const [showLevelOptions, setShowLevelOptions] = useState(false);
   
   const currentLevel = selectedDifficulty.level;
