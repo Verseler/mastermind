@@ -156,8 +156,11 @@ export default function Board({
           key={row + index + Timestamp}
           className="flex items-center justify-center gap-1"
         >
-          <div className="flex gap-1">{CodeCells(row, index)}</div>
-
+          <div 
+            className={`${row.attempt === currentAttempt ? "rounded-full outline-amber-300 outline": ""} 
+            flex gap-1`}
+          >{CodeCells(row, index)}</div>
+{/*${cell === '' && row.attempt === currentAttempt ? "animate-blinking" : ""} */}
           <div
             className={`${selectedDifficulty.level == "Hard" ? "max-w-[7vh]" : "max-w-[5vh]"} flex gap-0.5 justify-center  flex-wrap ms-3`}
           >
@@ -172,8 +175,7 @@ export default function Board({
   const CodeCells = (row, rowIndex) => {
     return row.codeCells.map((cell, cellIndex) => (
       <CircularCell
-        className={`${cell === '' && row.attempt === currentAttempt ? "animate-blinking" : ""}
-        grid font-bold place-items-center`}
+        className="grid font-bold place-items-center"
         key={cell + cellIndex + Timestamp}
         size="lg"
         borderWidth="2"
