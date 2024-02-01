@@ -160,7 +160,6 @@ export default function Board({
             className={`${row.attempt === currentAttempt ? "rounded-full outline-4 outline-amber-300 outline": ""} 
             flex gap-1`}
           >{CodeCells(row, index)}</div>
-{/*${cell === '' && row.attempt === currentAttempt ? "animate-blinking" : ""} */}
           <div
             className={`${selectedDifficulty.level == "Hard" ? "max-w-[7vh]" : "max-w-[5vh]"} flex gap-0.5 justify-center  flex-wrap ms-3`}
           >

@@ -163,7 +163,6 @@ function App() {
         />
 
         <CodePegOptions
-          codePegOptions={codePegOptions}
           selectedCodePeg={selectedCodePeg}
           setSelectedCodePeg={setSelectedCodePeg}
           selectedDifficulty={selectedDifficulty}

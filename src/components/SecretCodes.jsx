@@ -4,7 +4,6 @@ import { getCodePegColor, getCodePegNumber } from "../utilities/codePegs";
 import questionMarkIcon from "../assets/question_mark_icon.svg";
 
 export default function SecretCodes({remainingAttempt, winGame, secretCodes }) {
-  console.log(secretCodes)
   /*
    *
    * UI
@@ -43,15 +42,3 @@ export default function SecretCodes({remainingAttempt, winGame, secretCodes }) {
     </div>
   );
 }
-
-/*
-
-
-remainingAttempt === 0 || winCurrentGame ? (
-        <Tile key={index} bgColor={Colors[colCode]} code={colCode} hasChild={false} />
-      ) : (
-        <Tile key={index} bgColor={Colors[EMPTY]} hasChild={true} />
-      )
-    )}
-
-*/
