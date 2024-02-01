@@ -18,7 +18,26 @@ function App() {
   const [selectedDifficulty, setSelectedDifficulty] = useState(Difficulty[0]);
   const [currentAttempt, setCurrentAttempt] = useState(1);
   const remainingAttempt = 11 - currentAttempt;
+  const [showGuide, setShowGuide] = useState(false);
 
+
+
+    /*
+   * 
+   * Show guide if users havent see it for the first time in its device  
+   * 
+   */
+    useEffect(() => {
+      //if user haven see the guide for the first time
+      //show guide
+      if(!localStorage.getItem('watchedGuide')) {
+       localStorage.setItem('watchedGuide', true);
+       
+       handleShowGuideModal();
+      }
+    },[]);
+
+  
   /*
    * 
    * Every first web load start the game
@@ -38,6 +57,12 @@ function App() {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, [selectedDifficulty]);
+
+
+
+  function handleShowGuideModal() {
+    setShowGuide((prevShowGuide) => !prevShowGuide);
+  }
 
 
   function startGame() {
@@ -78,7 +103,7 @@ function App() {
   */
  const RemainingAttemptCount = () => {
   return(
-    <div className={`${selectedDifficulty.level == "Hard" ? "w-[7vh]" : "w-[5vh]"} text-2xl font-bold text-center ms-3 md:text-3xl`}>
+    <div className={`${selectedDifficulty.level == "Hard" ? "w-[7vh]" : "w-[5vh]"} grid place-items-center text-2xl font-bold text-center ms-3 md:text-3xl`}>
     <p>{remainingAttempt}</p>
   </div>
   );
@@ -88,7 +113,7 @@ function App() {
   if (winGame) {
     return (
       <>
-      <Confetti />
+      <Confetti recycle={false} tweenDuration={60000} numberOfPieces="2500" />
       <AnnouncementModal
         message="You break the code. Play again?"
         startGame={startGame}
@@ -108,7 +133,12 @@ function App() {
       {/*display when game is over*/}
       {NewGameDialogUI()}
 
-      <Header setNewLevel={setNewLevel} selectedDifficulty={selectedDifficulty} />  
+      <Header 
+        setNewLevel={setNewLevel} 
+        selectedDifficulty={selectedDifficulty}
+        showGuide={showGuide}
+        handleShowGuideModal={handleShowGuideModal}
+      />  
 
       <main className="flex flex-col items-center justify-between flex-1 sm:justify-around">
         <div className="flex justify-center w-full gap-1 mt-3 sm:mt-0">
